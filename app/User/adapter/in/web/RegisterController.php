@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\User\adapter\in\web\request\RegisterRequest;
 use App\User\adapter\in\web\response\RegisterResponse;
 use App\User\application\port\in\RegisterCommand;
-use App\User\application\port\in\RegisterUseCase;
+use App\User\application\port\in\useCase\RegisterUseCase;
 
 class RegisterController extends Controller
 {

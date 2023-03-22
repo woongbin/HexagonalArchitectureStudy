@@ -3,10 +3,10 @@
 namespace App\User\adapter\out\persistence;
 
 use App\User\application\port\out\CheckDuplicateEmailPort;
-use App\User\application\port\out\UserRegisterPort;
+use App\User\application\port\out\RegisterPort;
 use App\User\domain\User;
 
-class RegisterPersistenceAdapter implements CheckDuplicateEmailPort, UserRegisterPort
+class RegisterPersistenceAdapter implements CheckDuplicateEmailPort, RegisterPort
 {
     protected UserRepository $repository;
 

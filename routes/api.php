@@ -20,4 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('user')->group(function () {
     Route::post('register', [\App\User\adapter\in\web\RegisterController::class, 'register']);
+    Route::post('leave', [\App\User\adapter\in\web\LeaveController::class, 'leave']);
 });

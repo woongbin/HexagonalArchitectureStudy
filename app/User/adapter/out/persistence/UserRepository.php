@@ -6,6 +6,14 @@ use App\User\domain\User;
 
 class UserRepository
 {
+    public function findByEmail(string $email): ?User
+    {
+        return User::query()
+            ->where('email', $email)
+            ->get()
+            ->first();
+    }
+
     public function checkDuplicateEmail(string $email): bool
     {
         return User::query()

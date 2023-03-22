@@ -3,9 +3,9 @@
 namespace App\User\application\service;
 
 use App\User\application\port\in\RegisterCommand;
-use App\User\application\port\in\RegisterUseCase;
+use App\User\application\port\in\useCase\RegisterUseCase;
 use App\User\application\port\out\CheckDuplicateEmailPort;
-use App\User\application\port\out\UserRegisterPort;
+use App\User\application\port\out\RegisterPort;
 use App\User\domain\User;
 use Exception;
 
@@ -13,18 +13,18 @@ class RegisterService implements RegisterUseCase
 {
     protected CheckDuplicateEmailPort $checkDuplicateEmailPort;
 
-    protected UserRegisterPort $userRegisterPort;
+    protected RegisterPort $registerPort;
 
     /**
      * @param CheckDuplicateEmailPort $checkDuplicateEmailPort
-     * @param UserRegisterPort $userRegisterPort
+     * @param RegisterPort $registerPort
      */
     public function __construct(
         CheckDuplicateEmailPort $checkDuplicateEmailPort,
-        UserRegisterPort $userRegisterPort
+        RegisterPort $registerPort
     ) {
         $this->checkDuplicateEmailPort = $checkDuplicateEmailPort;
-        $this->userRegisterPort = $userRegisterPort;
+        $this->registerPort = $registerPort;
     }
 
     /**
@@ -40,6 +40,6 @@ class RegisterService implements RegisterUseCase
             throw new Exception('이메일 중복');
         }
 
-        return $this->userRegisterPort->register($email, $password, $name);
+        return $this->registerPort->register($email, $password, $name);
     }
 }
