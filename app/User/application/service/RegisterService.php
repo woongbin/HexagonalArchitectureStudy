@@ -8,6 +8,8 @@ use App\User\application\port\out\CheckDuplicateEmailPort;
 use App\User\application\port\out\RegisterPort;
 use App\User\domain\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class RegisterService implements RegisterUseCase
 {
@@ -28,7 +30,9 @@ class RegisterService implements RegisterUseCase
     }
 
     /**
-     * @throws Exception
+     * @param RegisterCommand $command
+     * @return User
+     * @throws Throwable
      */
     public function register(RegisterCommand $command): User
     {
@@ -40,6 +44,16 @@ class RegisterService implements RegisterUseCase
             throw new Exception('이메일 중복');
         }
 
-        return $this->registerPort->register($email, $password, $name);
+        DB::beginTransaction();
+        try {
+            $user = $this->registerPort->register($email, $password, $name);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
+        DB::commit();
+
+        return $user;
     }
 }

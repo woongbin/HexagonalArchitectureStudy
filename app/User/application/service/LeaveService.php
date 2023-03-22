@@ -8,6 +8,8 @@ use App\User\application\port\out\FindByEmailPort;
 use App\User\application\port\out\LeavePort;
 use App\User\domain\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class LeaveService implements LeaveUseCase
 {
@@ -22,7 +24,9 @@ class LeaveService implements LeaveUseCase
     }
 
     /**
-     * @throws Exception
+     * @param LeaveCommand $command
+     * @return User
+     * @throws Throwable
      */
     public function leave(LeaveCommand $command): User
     {
@@ -38,6 +42,16 @@ class LeaveService implements LeaveUseCase
             throw new Exception('비밀번호가 맞지 않습니다.');
         }
 
-        return $this->leavePort->leave($user);
+        DB::beginTransaction();
+        try {
+            $deletedUser = $this->leavePort->leave($user);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
+        DB::commit();
+
+        return $deletedUser;
     }
 }
